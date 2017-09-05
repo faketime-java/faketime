@@ -27,4 +27,5 @@ jobs:
       provider: script
       script: release/deploy.sh
       on:
+        tags: true
         branch: master
