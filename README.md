@@ -5,6 +5,37 @@
 
 [![Build Status](https://travis-ci.org/faketime-java/faketime.svg?branch=master)](https://travis-ci.org/faketime-java/faketime)
 
+```java
+class ExamRegistrationServiceTest implements FakeTimeMixin {
+  
+  @Autowired
+  ExamRegistrationService examRegistrationService;
+  
+  @Test
+  public void registrationExpiresAfterGivenPeriod() {
+    ExamRegistration registration = examRegistrationService.openRegistrationValidFor(Duration.ofDays(5));
+    
+    offsetTimeByDays(5);
+    
+    assertThat(registration.hasExpired()).isTrue();
+  }
+  
+    @Test
+    public void registrationIsValidDuringGivenPeriod() {
+      ExamRegistration registration = examRegistrationService.openRegistrationValidFor(Duration.ofDays(5));
+      
+      offsetTimeBy(Duration.ofDays(5).minusMinutes(1));
+      
+      assertThat(registration.hasExpired()).isFalse();
+    }
+  
+  @After
+  public void restoreRealTimeAfterTest() {
+    restoreRealTime();
+  }
+}
+```
+
 ## Manual setup
 Start faking time in 4 easy steps:
 1. Download the `faketime-agent.jar` for your operating system from the [Maven Central](https://mvnrepository.com/artifact/io.github.faketime-java/faketime-agent) repository.
