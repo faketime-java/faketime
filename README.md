@@ -1,4 +1,4 @@
-# FakeTime
+# FakeTime for Java
 > FakeTime uses a native Java agent to replace `System.currentTimeMillis()` implementation with the one you can control using system properties.
 
 > Inspired by [arvindsv/faketime](https://github.com/arvindsv/faketime).
@@ -174,7 +174,7 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
 IntelliJ has a cool feature that reads `argLine` from `pom.xml` and adds all arguments to the IDE test runner.
 The only thing you need to do is to replace `${faketime.argLine}` with literal arguments, since IntelliJ is not aware of `${faketime.argLine}`.
 
-_Note: `target` is often cleaned, so make sure `faketime-maven-plugin` has downloaded the agent before running tests from IntelliJ_
+_Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has downloaded the agent, otherwise tests won't start_
 
 > Full example [here](https://github.com/faketime-java/faketime/blob/master/e2e-tests/pom.xml)
 ```xml
@@ -229,7 +229,7 @@ _Note: `target` is often cleaned, so make sure `faketime-maven-plugin` has downl
 </build>
 ```
 ## Maven + Eclipse
-Preferences > Java > Installed JREs > Select > Edit > Default VM arguments:
+`Preferences > Java > Installed JREs > Select > Edit > Default VM arguments`
 ```bash
 # if you're on Windows
 -agentpath:target/faketime.dll
