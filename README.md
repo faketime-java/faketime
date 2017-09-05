@@ -20,14 +20,14 @@ class ExamRegistrationServiceTest implements FakeTimeMixin {
     assertThat(registration.hasExpired()).isTrue();
   }
   
-    @Test
-    public void registrationIsValidDuringGivenPeriod() {
-      ExamRegistration registration = examRegistrationService.openRegistrationValidFor(Duration.ofDays(5));
+  @Test
+  public void registrationIsValidDuringGivenPeriod() {
+    ExamRegistration registration = examRegistrationService.openRegistrationValidFor(Duration.ofDays(5));
       
-      offsetTimeBy(Duration.ofDays(5).minusMinutes(1));
+    offsetTimeBy(Duration.ofDays(5).minusMinutes(1));
       
-      assertThat(registration.hasExpired()).isFalse();
-    }
+    assertThat(registration.hasExpired()).isFalse();
+  }
   
   @After
   public void restoreRealTimeAfterTest() {
