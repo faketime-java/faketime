@@ -10,7 +10,7 @@
   <version>0-SNAPSHOT</version>
 
   <parent>
-    <groupId>io.github.faketime</groupId>
+    <groupId>io.github.faketime-java</groupId>
     <artifactId>faketime-parent</artifactId>
     <version>0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>

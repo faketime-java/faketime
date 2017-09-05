@@ -11,7 +11,7 @@ Start faking time in 4 easy steps:
 ```xml
 <!-- Windows 32bit -->
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
   <version>0.1.0</version>
   <classifier>windows32</classifier>
@@ -19,7 +19,7 @@ Start faking time in 4 easy steps:
 
 <!-- Windows 64bit -->
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
   <version>0.1.0</version>
   <classifier>windows64</classifier>
@@ -27,7 +27,7 @@ Start faking time in 4 easy steps:
 
 <!-- macOS 32bit -->
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
   <version>0.1.0</version>
   <classifier>mac32</classifier>
@@ -35,7 +35,7 @@ Start faking time in 4 easy steps:
 
 <!-- macOS 64bit -->
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
   <version>0.1.0</version>
   <classifier>mac64</classifier>
@@ -43,7 +43,7 @@ Start faking time in 4 easy steps:
 
 <!-- Linux 32bit -->
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
   <version>0.1.0</version>
   <classifier>linux32</classifier>
@@ -51,7 +51,7 @@ Start faking time in 4 easy steps:
 
 <!-- Linux 64bit -->
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
   <version>0.1.0</version>
   <classifier>linux64</classifier>
@@ -78,7 +78,7 @@ System.out.println(System.currentTimeMillis()); // 12345
 ## Java 8 API
 ```xml
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-api</artifactId>
   <version>0.1.0</version>
   <scope>test</scope>
@@ -113,7 +113,7 @@ class MyTestSuite implements FakeTimeMixin {
 ## JUnit rule
 ```xml
 <dependency>
-  <groupId>io.github.faketime</groupId>
+  <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-junit</artifactId>
   <version>0.1.0</version>
   <scope>test</scope>
@@ -156,7 +156,7 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
     </plugin>
     
     <plugin>
-      <groupId>io.github.faketime</groupId>
+      <groupId>io.github.faketime-java</groupId>
       <artifactId>faketime-maven-plugin</artifactId>
       <version>0.1.0</version>
       <executions>
@@ -212,7 +212,7 @@ The only thing you need to do is to replace `${faketime.argLine}` with literal a
     </plugin>
     
     <plugin>
-      <groupId>io.github.faketime</groupId>
+      <groupId>io.github.faketime-java</groupId>
       <artifactId>faketime-maven-plugin</artifactId>
       <version>0.1.0</version>
       <executions>
