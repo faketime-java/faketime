@@ -142,7 +142,7 @@ class MyTestSuite implements FakeTimeMixin {
 For further convenience there is a Maven plugin that downloads and unpacks the correct agent for your operating system.
 It then sets a property that you can use in `surefire` or `failsafe` plugins to attach the agent.
 
-> Full example [here](https://github.com/faketime-java/faketime/e2e-tests/pom.xml)
+> Full example [here](https://github.com/faketime-java/faketime/blob/master/e2e-tests/pom.xml)
 ```xml
 <build>
   <plugins>
@@ -174,7 +174,7 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
 IntelliJ has a cool feature that reads `argLine` from `pom.xml` and adds all arguments to the IDE test runner.
 The only thing you need to do is to replace `${faketime.argLine}` with literal arguments, since IntelliJ is not aware of `${faketime.argLine}`.
 
-> Full example [here](https://github.com/faketime-java/faketime/e2e-tests/pom.xml)
+> Full example [here](https://github.com/faketime-java/faketime/blob/master/e2e-tests/pom.xml)
 ```xml
 <properties>
   <faketime.binary>libfaketime</faketime.binary>
