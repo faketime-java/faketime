@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>FakeTime E2E Tests</name>
+  <artifactId>faketime-e2e-tests</artifactId>
+  <packaging>jar</packaging>
+  <version>0-SNAPSHOT</version>
+
+  <parent>
+    <groupId>io.github.faketime</groupId>
+    <artifactId>faketime-parent</artifactId>
+    <version>0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <properties>
+    <faketime.binary>libfaketime</faketime.binary>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>faketimeBinary</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <faketime.binary>faketime.dll</faketime.binary>
+      </properties>
+    </profile>
+  </profiles>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.github.faketime</groupId>
+      <artifactId>faketime-junit</artifactId>
+      <version>0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.8.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20</version>
+
+        <configuration>
+          <runOrder>random</runOrder>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <argLine>${faketime.argLine}</argLine>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.20</version>
+
+        <configuration>
+          <runOrder>random</runOrder>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <argLine>
+            -agentpath:${project.build.directory}/${faketime.binary}
+            -XX:+UnlockDiagnosticVMOptions
+            -XX:DisableIntrinsic=_currentTimeMillis
+            -XX:CompileCommand=quiet
+            -XX:CompileCommand=exclude,java/lang/System.currentTimeMillis
+          </argLine>
+        </configuration>
+
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>io.github.faketime</groupId>
+        <artifactId>faketime-maven-plugin</artifactId>
+        <version>0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

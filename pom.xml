@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>FakeTime Parent POM</name>
+  <groupId>io.github.faketime</groupId>
+  <artifactId>faketime-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>0-SNAPSHOT</version>
+
+  <description>
+    FakeTime uses a native Java agent to replace System.currentTimeMillis() implementation with the one you can control using system properties
+  </description>
+  <url>https://github.com/faketime-java/faketime</url>
+  <licenses>
+    <license>
+      <name>MIT</name>
+      <url>http://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>mihhail-lapushkin</id>
+      <name>Mihhail Lapushkin</name>
+      <email>mihhail.lapushkin@gmail.com</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <modules>
+    <module>modules/agent</module>
+    <module>modules/api</module>
+    <module>modules/junit</module>
+    <module>modules/maven-plugin</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.2</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <compilerArgs>
+            <arg>-Xlint:all</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>with-e2e-tests</id>
+      <modules>
+        <module>e2e-tests</module>
+      </modules>
+    </profile>
+  </profiles>
+</project>
