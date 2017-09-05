@@ -174,6 +174,8 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
 IntelliJ has a cool feature that reads `argLine` from `pom.xml` and adds all arguments to the IDE test runner.
 The only thing you need to do is to replace `${faketime.argLine}` with literal arguments, since IntelliJ is not aware of `${faketime.argLine}`.
 
+_Note: `target` is often cleaned, so make sure `faketime-maven-plugin` has downloaded the agent before running tests from IntelliJ_
+
 > Full example [here](https://github.com/faketime-java/faketime/blob/master/e2e-tests/pom.xml)
 ```xml
 <properties>
