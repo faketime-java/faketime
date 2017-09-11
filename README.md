@@ -6,7 +6,7 @@
 [![Build Status](https://travis-ci.org/faketime-java/faketime.svg?branch=master)](https://travis-ci.org/faketime-java/faketime)
 
 ```java
-class ExamRegistrationServiceTest implements FakeTimeMixin {
+public class ExamRegistrationServiceTest implements FakeTimeMixin {
   
   @Autowired
   ExamRegistrationService examRegistrationService;
@@ -97,7 +97,7 @@ Start faking time in 4 easy steps:
 -XX:CompileCommand=quiet
 -XX:CompileCommand=exclude,java/lang/System.currentTimeMillis
 ```
-3. Use system properties to manipulate `System.currentTimeMillis()`.
+4. Use system properties to manipulate `System.currentTimeMillis()`.
 ```java
 System.out.println(System.currentTimeMillis()); // 1234567890
 System.setProperty("faketime.offset.ms", "-7890");
@@ -125,7 +125,7 @@ FakeTime.restoreReal();
 ```
 And in case you get annoyed by writing `FakeTime` all the time there is a handy mixin.
 ```java
-class MyTestSuite implements FakeTimeMixin {
+public class MyTest implements FakeTimeMixin {
   
   @Test
   public void someTimeTest() {
@@ -154,7 +154,7 @@ This rule calls `FakeTime.restoreReal()` after every test, so you don't have to.
 
 _Note: when using `faketime-junit` you don't need to add `faketime-api` as a `test` dependency_
 ```java
-class MyTestSuite implements FakeTimeMixin {
+public class MyTest implements FakeTimeMixin {
   
   @Rule
   public FakeTimeRule fakeTimeRule = new FakeTimeRule();
@@ -260,6 +260,8 @@ _Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has 
 </build>
 ```
 ## Maven + Eclipse
+_Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has downloaded the agent, otherwise tests won't start_
+
 `Preferences > Java > Installed JREs > Select > Edit > Default VM arguments`
 ```bash
 # if you're on Windows
