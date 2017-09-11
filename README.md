@@ -260,7 +260,7 @@ _Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has 
 </build>
 ```
 ## Maven + Eclipse
-_Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has downloaded the agent, otherwise tests won't start_
+_Note: before running tests from Eclipse make sure `faketime-maven-plugin` has downloaded the agent, otherwise tests won't start_
 
 `Preferences > Java > Installed JREs > Select > Edit > Default VM arguments`
 ```bash
