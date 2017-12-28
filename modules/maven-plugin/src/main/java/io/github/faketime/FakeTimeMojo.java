@@ -27,6 +27,9 @@ import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.components.io.fileselectors.FileSelector;
 import org.codehaus.plexus.components.io.fileselectors.IncludeExcludeFileSelector;
 
+/**
+ * @threadSafe
+ */
 @Mojo(name="prepare", defaultPhase = VALIDATE)
 public class FakeTimeMojo extends AbstractMojo {
 
