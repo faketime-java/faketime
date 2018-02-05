@@ -89,6 +89,30 @@ public interface FakeTimeMixin {
     FakeTime.stopAt(year, month, dayOfMonth);
   }
 
+  default void offsetStoppedTimeBy(long milliseconds) {
+    FakeTime.offsetStoppedBy(milliseconds);
+  }
+
+  default void offsetStoppedTimeBySeconds(long seconds) {
+    FakeTime.offsetStoppedBySeconds(seconds);
+  }
+
+  default void offsetStoppedTimeByMinutes(long minutes) {
+    FakeTime.offsetStoppedByMinutes(minutes);
+  }
+
+  default void offsetStoppedTimeByHours(long hours) {
+    FakeTime.offsetStoppedByHours(hours);
+  }
+
+  default void offsetStoppedTimeByDays(long days) {
+    FakeTime.offsetStoppedByDays(days);
+  }
+
+  default void offsetStoppedTimeBy(TemporalAmount amountToAdd) {
+    FakeTime.offsetStoppedBy(amountToAdd);
+  }
+
   default void offsetTimeBy(long milliseconds) {
     FakeTime.offsetBy(milliseconds);
   }
@@ -109,8 +133,8 @@ public interface FakeTimeMixin {
     FakeTime.offsetByDays(days);
   }
 
-  default void offsetTimeBy(TemporalAmount temporalAmount) {
-    FakeTime.offsetBy(temporalAmount);
+  default void offsetTimeBy(TemporalAmount amountToAdd) {
+    FakeTime.offsetBy(amountToAdd);
   }
 
   default void restoreRealTime() {

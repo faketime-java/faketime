@@ -96,6 +96,30 @@ public class FakeTime {
     stopAt(year, month, dayOfMonth, 0);
   }
 
+  public static void offsetStoppedBy(long milliseconds) {
+    stopAt(System.currentTimeMillis() + milliseconds);
+  }
+
+  public static void offsetStoppedBySeconds(long seconds) {
+    stopAt(LocalDateTime.now().plusSeconds(seconds));
+  }
+
+  public static void offsetStoppedByMinutes(long minutes) {
+    stopAt(LocalDateTime.now().plusMinutes(minutes));
+  }
+
+  public static void offsetStoppedByHours(long hours) {
+    stopAt(LocalDateTime.now().plusHours(hours));
+  }
+
+  public static void offsetStoppedByDays(long days) {
+    stopAt(LocalDateTime.now().plusDays(days));
+  }
+
+  public static void offsetStoppedBy(TemporalAmount amountToAdd) {
+    stopAt(LocalDateTime.now().plus(amountToAdd));
+  }
+
   public static void offsetBy(long milliseconds) {
     restoreReal();
     System.setProperty(OFFSET_PROPERTY, Long.toString(milliseconds));
@@ -117,8 +141,8 @@ public class FakeTime {
     offsetByHours(days * 24);
   }
 
-  public static void offsetBy(TemporalAmount amount) {
-    offsetBy(amount.get(SECONDS) * 1_000);
+  public static void offsetBy(TemporalAmount amountToAdd) {
+    offsetBy(amountToAdd.get(SECONDS) * 1_000);
   }
 
   public static void restoreReal() {

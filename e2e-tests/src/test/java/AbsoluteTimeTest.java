@@ -1,5 +1,7 @@
+import static java.lang.System.currentTimeMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -181,5 +183,60 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
 
     assertThat(ZonedDateTime.now(ZoneId.of("Europe/Tallinn")))
         .isEqualTo(ZonedDateTime.of(2000, 10, 9, 0, 0, 0, 0, ZoneId.of("Europe/Tallinn")));
+  }
+
+
+  @Test
+  public void offsetStoppedTimeBy_milliseconds() {
+    stopTimeAt(1_000_000);
+
+    offsetStoppedTimeBy(234567);
+
+    assertThat(currentTimeMillis()).isEqualTo(1_234_567);
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_seconds() {
+    stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
+
+    offsetStoppedTimeBySeconds(56);
+
+    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 8, 8, 2, 5_000_000));
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_minutes() {
+    stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
+
+    offsetStoppedTimeByMinutes(56);
+
+    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 9, 3, 6, 5_000_000));
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_hours() {
+    stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
+
+    offsetStoppedTimeByHours(23);
+
+    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 10, 7, 7, 6, 5_000_000));
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_days() {
+    stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
+
+    offsetStoppedTimeByDays(30);
+
+    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 11, 8, 8, 7, 6, 5_000_000));
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_duration() {
+    stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
+
+    offsetStoppedTimeBy(Duration.ofMinutes(56));
+
+    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 9, 3, 6, 5_000_000));
   }
 }
