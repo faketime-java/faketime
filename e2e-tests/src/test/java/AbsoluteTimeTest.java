@@ -1,5 +1,6 @@
 import static java.lang.System.currentTimeMillis;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -238,5 +239,48 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
     offsetStoppedTimeBy(Duration.ofMinutes(56));
 
     assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 9, 3, 6, 5_000_000));
+  }
+
+
+  @Test
+  public void offsetStoppedTimeBy_milliseconds_throwsIfNotStopped() {
+    assertThatIllegalStateException()
+        .isThrownBy(() -> offsetStoppedTimeBy(234567))
+        .withMessage("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_seconds_throwsIfNotStopped() {
+    assertThatIllegalStateException()
+        .isThrownBy(() -> offsetStoppedTimeBySeconds(56))
+        .withMessage("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_minutes_throwsIfNotStopped() {
+    assertThatIllegalStateException()
+        .isThrownBy(() -> offsetStoppedTimeByMinutes(56))
+        .withMessage("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_hours_throwsIfNotStopped() {
+    assertThatIllegalStateException()
+        .isThrownBy(() -> offsetStoppedTimeByHours(23))
+        .withMessage("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_days_throwsIfNotStopped() {
+    assertThatIllegalStateException()
+        .isThrownBy(() -> offsetStoppedTimeByDays(30))
+        .withMessage("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
+  }
+
+  @Test
+  public void offsetStoppedTimeBy_duration_throwsIfNotStopped() {
+    assertThatIllegalStateException()
+        .isThrownBy(() -> offsetStoppedTimeBy(Duration.ofMinutes(56)))
+        .withMessage("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
   }
 }

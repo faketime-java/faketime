@@ -1,4 +1,6 @@
-# Change Log
+## [0.4.0] - 2018-02-06
+
+- Assert that time is indeed stopped when offsetting stopped time.
 
 ## [0.3.0] - 2018-02-05
 

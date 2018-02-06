@@ -97,27 +97,39 @@ public class FakeTime {
   }
 
   public static void offsetStoppedBy(long milliseconds) {
+    assertStopped();
     stopAt(System.currentTimeMillis() + milliseconds);
   }
 
   public static void offsetStoppedBySeconds(long seconds) {
+    assertStopped();
     stopAt(LocalDateTime.now().plusSeconds(seconds));
   }
 
   public static void offsetStoppedByMinutes(long minutes) {
+    assertStopped();
     stopAt(LocalDateTime.now().plusMinutes(minutes));
   }
 
   public static void offsetStoppedByHours(long hours) {
+    assertStopped();
     stopAt(LocalDateTime.now().plusHours(hours));
   }
 
   public static void offsetStoppedByDays(long days) {
+    assertStopped();
     stopAt(LocalDateTime.now().plusDays(days));
   }
 
   public static void offsetStoppedBy(TemporalAmount amountToAdd) {
+    assertStopped();
     stopAt(LocalDateTime.now().plus(amountToAdd));
+  }
+
+  private static void assertStopped() {
+    if (System.getProperty(ABSOLUTE_PROPERTY) == null) {
+      throw new IllegalStateException("In order to offset stopped time you must first stop the time using one of stopAt*() methods");
+    }
   }
 
   public static void offsetBy(long milliseconds) {
