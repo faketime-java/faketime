@@ -1,3 +1,8 @@
+## [0.5.0] - 2018-02-07
+
+- Every offset of stopped time should reset the previous one instead of applying on top of it.
+- Renamed methods that offset real time to avoid confusion.
+
 ## [0.4.0] - 2018-02-06
 
 - Assert that time is indeed stopped when offsetting stopped time.

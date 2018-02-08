@@ -2,6 +2,7 @@ package io.github.faketime;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -14,6 +15,8 @@ public class FakeTime {
 
   private static final String ABSOLUTE_PROPERTY = "faketime.absolute.ms";
   private static final String OFFSET_PROPERTY = "faketime.offset.ms";
+
+  private static volatile long stoppedOffsetMs = 0;
 
   public static void stopAt(long epochMillisecond) {
     restoreReal();
@@ -98,32 +101,33 @@ public class FakeTime {
 
   public static void offsetStoppedBy(long milliseconds) {
     assertStopped();
-    stopAt(System.currentTimeMillis() + milliseconds);
+    stopAt(System.currentTimeMillis() - stoppedOffsetMs + milliseconds);
+    stoppedOffsetMs = milliseconds;
   }
 
   public static void offsetStoppedBySeconds(long seconds) {
     assertStopped();
-    stopAt(LocalDateTime.now().plusSeconds(seconds));
+    offsetStoppedBy(seconds * 1_000);
   }
 
   public static void offsetStoppedByMinutes(long minutes) {
     assertStopped();
-    stopAt(LocalDateTime.now().plusMinutes(minutes));
+    offsetStoppedBySeconds(minutes * Duration.ofMinutes(1).getSeconds());
   }
 
   public static void offsetStoppedByHours(long hours) {
     assertStopped();
-    stopAt(LocalDateTime.now().plusHours(hours));
+    offsetStoppedBySeconds(hours * Duration.ofHours(1).getSeconds());
   }
 
   public static void offsetStoppedByDays(long days) {
     assertStopped();
-    stopAt(LocalDateTime.now().plusDays(days));
+    offsetStoppedBySeconds(days * Duration.ofDays(1).getSeconds());
   }
 
   public static void offsetStoppedBy(TemporalAmount amountToAdd) {
     assertStopped();
-    stopAt(LocalDateTime.now().plus(amountToAdd));
+    offsetStoppedBySeconds(amountToAdd.get(SECONDS));
   }
 
   private static void assertStopped() {
@@ -132,33 +136,34 @@ public class FakeTime {
     }
   }
 
-  public static void offsetBy(long milliseconds) {
+  public static void offsetRealBy(long milliseconds) {
     restoreReal();
     System.setProperty(OFFSET_PROPERTY, Long.toString(milliseconds));
   }
 
-  public static void offsetBySeconds(int seconds) {
-    offsetBy(seconds * 1_000);
+  public static void offsetRealBySeconds(long seconds) {
+    offsetRealBy(seconds * 1_000);
   }
 
-  public static void offsetByMinutes(int minutes) {
-    offsetBySeconds(minutes * 60);
+  public static void offsetRealByMinutes(long minutes) {
+    offsetRealBySeconds(minutes * Duration.ofMinutes(1).getSeconds());
   }
 
-  public static void offsetByHours(int hours) {
-    offsetByMinutes(hours * 60);
+  public static void offsetRealByHours(long hours) {
+    offsetRealBySeconds(hours * Duration.ofHours(1).getSeconds());
   }
 
-  public static void offsetByDays(int days) {
-    offsetByHours(days * 24);
+  public static void offsetRealByDays(long days) {
+    offsetRealBySeconds(days * Duration.ofDays(1).getSeconds());
   }
 
-  public static void offsetBy(TemporalAmount amountToAdd) {
-    offsetBy(amountToAdd.get(SECONDS) * 1_000);
+  public static void offsetRealBy(TemporalAmount amountToAdd) {
+    offsetRealBySeconds(amountToAdd.get(SECONDS));
   }
 
   public static void restoreReal() {
     System.clearProperty(ABSOLUTE_PROPERTY);
     System.clearProperty(OFFSET_PROPERTY);
+    stoppedOffsetMs = 0;
   }
 }

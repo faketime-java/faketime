@@ -19,7 +19,7 @@ public class OffsetTimeTest implements FakeTimeMixin {
   public void milliseconds() {
     long currentMillis = currentTimeMillis();
 
-    offsetTimeBy(5_000_000);
+    offsetRealTimeBy(5_000_000);
 
     assertThat(currentTimeMillis()).isCloseTo(currentMillis + 5_000_000, offset(100L));
   }
@@ -28,7 +28,7 @@ public class OffsetTimeTest implements FakeTimeMixin {
   public void seconds() {
     long currentMillis = currentTimeMillis();
 
-    offsetTimeBySeconds(2_000);
+    offsetRealTimeBySeconds(2_000);
 
     assertThat(currentTimeMillis()).isCloseTo(currentMillis + 2_000 * 1_000, offset(100L));
   }
@@ -37,7 +37,7 @@ public class OffsetTimeTest implements FakeTimeMixin {
   public void minutes() {
     long currentMillis = currentTimeMillis();
 
-    offsetTimeByMinutes(100);
+    offsetRealTimeByMinutes(100);
 
     assertThat(currentTimeMillis()).isCloseTo(currentMillis + 100 * 60 * 1_000, offset(100L));
   }
@@ -46,7 +46,7 @@ public class OffsetTimeTest implements FakeTimeMixin {
   public void hours() {
     long currentMillis = currentTimeMillis();
 
-    offsetTimeByHours(3);
+    offsetRealTimeByHours(3);
 
     assertThat(currentTimeMillis()).isCloseTo(currentMillis + 3 * 60 * 60 * 1_000, offset(100L));
   }
@@ -55,7 +55,7 @@ public class OffsetTimeTest implements FakeTimeMixin {
   public void days() {
     long currentMillis = currentTimeMillis();
 
-    offsetTimeByDays(5);
+    offsetRealTimeByDays(5);
 
     assertThat(currentTimeMillis()).isCloseTo(currentMillis + 5 * 24 * 60 * 60 * 1_000, offset(100L));
   }
@@ -64,7 +64,7 @@ public class OffsetTimeTest implements FakeTimeMixin {
   public void duration() {
     long currentMillis = currentTimeMillis();
 
-    offsetTimeBy(Duration.ofMinutes(100));
+    offsetRealTimeBy(Duration.ofMinutes(100));
 
     assertThat(currentTimeMillis()).isCloseTo(currentMillis + 100 * 60 * 1_000, offset(100L));
   }

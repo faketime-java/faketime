@@ -113,28 +113,28 @@ public interface FakeTimeMixin {
     FakeTime.offsetStoppedBy(amountToAdd);
   }
 
-  default void offsetTimeBy(long milliseconds) {
-    FakeTime.offsetBy(milliseconds);
+  default void offsetRealTimeBy(long milliseconds) {
+    FakeTime.offsetRealBy(milliseconds);
   }
 
-  default void offsetTimeBySeconds(int seconds) {
-    FakeTime.offsetBySeconds(seconds);
+  default void offsetRealTimeBySeconds(long seconds) {
+    FakeTime.offsetRealBySeconds(seconds);
   }
 
-  default void offsetTimeByMinutes(int minutes) {
-    FakeTime.offsetByMinutes(minutes);
+  default void offsetRealTimeByMinutes(long minutes) {
+    FakeTime.offsetRealByMinutes(minutes);
   }
 
-  default void offsetTimeByHours(int hours) {
-    FakeTime.offsetByHours(hours);
+  default void offsetRealTimeByHours(long hours) {
+    FakeTime.offsetRealByHours(hours);
   }
 
-  default void offsetTimeByDays(int days) {
-    FakeTime.offsetByDays(days);
+  default void offsetRealTimeByDays(long days) {
+    FakeTime.offsetRealByDays(days);
   }
 
-  default void offsetTimeBy(TemporalAmount amountToAdd) {
-    FakeTime.offsetBy(amountToAdd);
+  default void offsetRealTimeBy(TemporalAmount amountToAdd) {
+    FakeTime.offsetRealBy(amountToAdd);
   }
 
   default void restoreRealTime() {

@@ -191,6 +191,7 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
   public void offsetStoppedTimeBy_milliseconds() {
     stopTimeAt(1_000_000);
 
+    offsetStoppedTimeBy(1);
     offsetStoppedTimeBy(234567);
 
     assertThat(currentTimeMillis()).isEqualTo(1_234_567);
@@ -200,6 +201,7 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
   public void offsetStoppedTimeBy_seconds() {
     stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
 
+    offsetStoppedTimeBySeconds(1);
     offsetStoppedTimeBySeconds(56);
 
     assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 8, 8, 2, 5_000_000));
@@ -209,6 +211,7 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
   public void offsetStoppedTimeBy_minutes() {
     stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
 
+    offsetStoppedTimeByMinutes(1);
     offsetStoppedTimeByMinutes(56);
 
     assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 9, 3, 6, 5_000_000));
@@ -218,6 +221,7 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
   public void offsetStoppedTimeBy_hours() {
     stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
 
+    offsetStoppedTimeByHours(1);
     offsetStoppedTimeByHours(23);
 
     assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 10, 7, 7, 6, 5_000_000));
@@ -227,6 +231,7 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
   public void offsetStoppedTimeBy_days() {
     stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
 
+    offsetStoppedTimeByDays(1);
     offsetStoppedTimeByDays(30);
 
     assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 11, 8, 8, 7, 6, 5_000_000));
@@ -236,6 +241,7 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
   public void offsetStoppedTimeBy_duration() {
     stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
 
+    offsetStoppedTimeBy(Duration.ofMinutes(1));
     offsetStoppedTimeBy(Duration.ofMinutes(56));
 
     assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 10, 9, 9, 3, 6, 5_000_000));
