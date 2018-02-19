@@ -15,7 +15,7 @@ public class ExamRegistrationServiceTest implements FakeTimeMixin {
   public void registrationExpiresAfterGivenPeriod() {
     ExamRegistration registration = examRegistrationService.openRegistrationValidFor(Duration.ofDays(5));
     
-    offsetTimeByDays(5);
+    offsetRealTimeByDays(5);
     
     assertThat(registration.hasExpired()).isTrue();
   }
@@ -24,7 +24,7 @@ public class ExamRegistrationServiceTest implements FakeTimeMixin {
   public void registrationIsValidDuringGivenPeriod() {
     ExamRegistration registration = examRegistrationService.openRegistrationValidFor(Duration.ofDays(5));
       
-    offsetTimeBy(Duration.ofDays(5).minusMinutes(1));
+    offsetRealTimeBy(Duration.ofDays(5).minusMinutes(1));
       
     assertThat(registration.hasExpired()).isFalse();
   }
@@ -119,8 +119,8 @@ In case you get tired of converting everything to milliseconds there is a Java T
 ```java
 FakeTime.stopAt(LocalDateTime.of(2000, 11, 10, 9, 8, 7));
 FakeTime.stopAt(2000, 11, 10, ZoneOffset.UTC);
-FakeTime.offsetByMinutes(100);
-FakeTime.offsetBy(Duration.ofHours(20));
+FakeTime.offsetRealByMinutes(100);
+FakeTime.offsetRealBy(Duration.ofHours(20));
 FakeTime.restoreReal();
 ```
 And in case you get annoyed by writing `FakeTime` all the time there is a handy mixin.
@@ -131,8 +131,8 @@ public class MyTest implements FakeTimeMixin {
   public void someTimeTest() {
     stopTimeAt(LocalDateTime.of(2000, 11, 10, 9, 8, 7));
     stopTimeAt(2000, 11, 10, ZoneOffset.UTC);
-    offsetTimeByMinutes(100);
-    offsetTimeBy(Duration.ofHours(20));
+    offsetRealTimeByMinutes(100);
+    offsetRealTimeBy(Duration.ofHours(20));
   }
   
   @After
