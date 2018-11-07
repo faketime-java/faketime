@@ -1,7 +1,18 @@
 language: java
 
+os:
+- linux
+- osx
+
 jdk:
 - oraclejdk8
+- oraclejdk9
+- oraclejdk10
+- oraclejdk11
+- openjdk8
+- openjdk9
+- openjdk10
+- openjdk11
 
 env:
   global:
@@ -11,7 +22,6 @@ env:
   - secure: fvj5ZVZ/s/YY/5zIGUtQkPtxNJcSH5I5UR3bZmS1VijPAgjlepw25mX4jEpeltN9qyEMmn8dnRWQz/EeZzky7EgaXop7hWJjXNj7EBgTFBdCpgciX/MWewLyloWlUcOUuiV2hznDh2sxGk9tty8sbnF7amCT5fIGQs4OmmVsZTpTpLPnH1ODqA/Up2xdFEaZLzkC/ps80ltToox1rXHCLBTa59zCNkRkiiHv270ueXBreoG7MTlfX8PfgblXPKaYjxNCjMd4gWOx9pqH6Ld+iSodCXzKzCiWjCyLanpQuySSSXF5nSbUsileLHdwz0ET2U3zNqbvo6Bals+GDuJYCkXCJ+O0wq8CU5RBPSjFSStRqqN3xsgqIh1SpDb+vuVo5N84pz9rmZSU731wmAO/TYnLJvYiEdqhjPNpSTVQZrfNg0f5+AoQgf0qOtz/jizlGLDwDsFkQGpYIPWsNwQMY6Ko0zsHWxXlRYc3T++M9JW0ACOAz0IuLPjrNfLdZD8+4F0cQe+MbpLtlGZ2w+3QsmLccAY/lRK9JGtjWdO4pTM6wP682ijZqaY+R0v2fGfcc5ML6VAsXW3elCWyRMCr8x++nE+C4mNA+OtKR+gJ6hGSHZkYNEDUVyvWTIABSRXZuJlt9/fFigPSksEurVUqohFz/hEUPsplNOUeQzOs9rk=
 
 install:
-- echo "MAVEN_OPTS='-XX:+TieredCompilation -XX:TieredStopAtLevel=1'" > ~/.mavenrc
 - "./mvnw -T4 -Dmaven.test.skip=true install"
 
 jobs:
@@ -29,3 +39,5 @@ jobs:
       on:
         tags: true
         branch: master
+        jdk: openjdk11
+        condition: $TRAVIS_OS_NAME = linux
