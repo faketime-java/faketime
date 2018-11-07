@@ -118,7 +118,8 @@ public class FakeTimeMojo extends AbstractMojo {
         "-XX:+UnlockDiagnosticVMOptions",
         "-XX:DisableIntrinsic=_currentTimeMillis",
         "-XX:CompileCommand=quiet",
-        "-XX:CompileCommand=exclude,java/lang/System.currentTimeMillis");
+        "-XX:CompileCommand=exclude,java/lang/System.currentTimeMillis",
+        "-XX:CompileCommand=exclude,jdk/internal/misc/VM.getNanoTimeAdjustment");
   }
 
   private Os getOs() {
