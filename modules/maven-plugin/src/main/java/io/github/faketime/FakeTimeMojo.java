@@ -17,10 +17,10 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.shared.artifact.ArtifactCoordinate;
-import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolverException;
+import org.apache.maven.shared.transfer.artifact.ArtifactCoordinate;
+import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
@@ -69,7 +69,6 @@ public class FakeTimeMojo extends AbstractMojo {
       unArchiver.setSourceFile(artifact.getFile());
       unArchiver.setDestDirectory(getTargetDirectory());
       unArchiver.setFileSelectors(getAgentBinaryFileSelector());
-      unArchiver.setUseJvmChmod(true);
       unArchiver.extract();
     }
     catch (ArtifactResolverException | NoSuchArchiverException e) {

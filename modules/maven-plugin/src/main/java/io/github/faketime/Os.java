@@ -1,23 +1,30 @@
 package io.github.faketime;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.codehaus.plexus.util.Os.OS_ARCH;
 import static org.codehaus.plexus.util.Os.OS_NAME;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 public enum Os {
-  WINDOWS(new String[] { "windows" }, "windows", "faketime.dll"),
-  LINUX(new String[] { "linux" }, "linux", "libfaketime"),
-  MAC(new String[] { "mac", "osx" }, "mac", "libfaketime");
 
-  private final String[] names;
+  WINDOWS("windows", "windows", "faketime.dll"),
+  LINUX("linux", "linux", "libfaketime"),
+  MAC(asList("mac", "osx"), "mac", "libfaketime");
+
+  private final List<String> names;
   private final String classifierName;
   private final String agentBinaryName;
 
-  private Os(String[] names, String classifierName, String agentBinaryName) {
+  Os(List<String> names, String classifierName, String agentBinaryName) {
     this.names = names;
     this.classifierName = classifierName;
     this.agentBinaryName = agentBinaryName;
+  }
+
+  Os(String name, String classifierName, String agentBinaryName) {
+    this(singletonList(name), classifierName, agentBinaryName);
   }
 
   public static String getBitness() {
@@ -51,6 +58,6 @@ public enum Os {
   }
 
   public boolean isCurrent() {
-    return Stream.of(names).anyMatch(OS_NAME::contains);
+    return names.stream().anyMatch(OS_NAME::contains);
   }
 }
