@@ -44,7 +44,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <classifier>windows32</classifier>
 </dependency>
 
@@ -52,7 +52,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <classifier>windows64</classifier>
 </dependency>
 
@@ -60,7 +60,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <classifier>mac32</classifier>
 </dependency>
 
@@ -68,7 +68,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <classifier>mac64</classifier>
 </dependency>
 
@@ -76,7 +76,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <classifier>linux32</classifier>
 </dependency>
 
@@ -84,7 +84,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <classifier>linux64</classifier>
 </dependency>
 ```
@@ -112,7 +112,7 @@ System.out.println(System.currentTimeMillis()); // 12345
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-api</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -147,7 +147,7 @@ public class MyTest implements FakeTimeMixin {
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-junit</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -190,7 +190,7 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
     <plugin>
       <groupId>io.github.faketime-java</groupId>
       <artifactId>faketime-maven-plugin</artifactId>
-      <version>0.6.0</version>
+      <version>0.7.0</version>
       <executions>
         <execution>
           <goals>
@@ -249,7 +249,7 @@ _Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has 
     <plugin>
       <groupId>io.github.faketime-java</groupId>
       <artifactId>faketime-maven-plugin</artifactId>
-      <version>0.6.0</version>
+      <version>0.7.0</version>
       <executions>
         <execution>
           <goals>

@@ -1,3 +1,13 @@
+## [0.7.0] - 2018-11-07
+
+- Support attaching same agent multiple times.
+
+## [0.6.0] - 2018-11-07
+
+- Support for Oracle JDK 8 to 11.
+- Support for OpenJDK 8 to 11.
+- Updated dependencies.
+
 ## [0.5.0] - 2018-02-07
 
 - Every offset of stopped time should reset the previous one instead of applying on top of it.

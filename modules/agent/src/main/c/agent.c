@@ -124,6 +124,10 @@ void JNICALL onVmInit(jvmtiEnv *jvmti_env, JNIEnv* jni_env, jthread thread) {
 }
 
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) {
+  if (jvmti != NULL) {
+    return JNI_OK;
+  }
+
   if ((*jvm)->GetEnv(jvm, (void **)&jvmti, JVMTI_VERSION_1_0) != JNI_OK || jvmti == NULL) {
     fprintf(stderr, "FakeTime agent failed to get JVMTI");
     return JNI_ERR;
