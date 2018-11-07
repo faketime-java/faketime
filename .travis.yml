@@ -38,5 +38,3 @@ jobs:
       on:
         tags: true
         branch: master
-        jdk: openjdk11
-        condition: $TRAVIS_OS_NAME = linux
