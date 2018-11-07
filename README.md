@@ -44,7 +44,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <classifier>windows32</classifier>
 </dependency>
 
@@ -52,7 +52,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <classifier>windows64</classifier>
 </dependency>
 
@@ -60,7 +60,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <classifier>mac32</classifier>
 </dependency>
 
@@ -68,7 +68,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <classifier>mac64</classifier>
 </dependency>
 
@@ -76,7 +76,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <classifier>linux32</classifier>
 </dependency>
 
@@ -84,7 +84,7 @@ Start faking time in 4 easy steps:
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-agent</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <classifier>linux64</classifier>
 </dependency>
 ```
@@ -96,6 +96,7 @@ Start faking time in 4 easy steps:
 -XX:DisableIntrinsic=_currentTimeMillis
 -XX:CompileCommand=quiet
 -XX:CompileCommand=exclude,java/lang/System.currentTimeMillis
+-XX:CompileCommand=exclude,jdk/internal/misc/VM.getNanoTimeAdjustment
 ```
 4. Use system properties to manipulate `System.currentTimeMillis()`.
 ```java
@@ -111,7 +112,7 @@ System.out.println(System.currentTimeMillis()); // 12345
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-api</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -146,7 +147,7 @@ public class MyTest implements FakeTimeMixin {
 <dependency>
   <groupId>io.github.faketime-java</groupId>
   <artifactId>faketime-junit</artifactId>
-  <version>0.1.0</version>
+  <version>0.6.0</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -180,7 +181,7 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-surefire-plugin</artifactId>
-      <version>2.20</version>
+      <version>2.22.1</version>
       <configuration>
         <argLine>${faketime.argLine}</argLine>
       </configuration>
@@ -189,7 +190,7 @@ It then sets a property that you can use in `surefire` or `failsafe` plugins to 
     <plugin>
       <groupId>io.github.faketime-java</groupId>
       <artifactId>faketime-maven-plugin</artifactId>
-      <version>0.1.0</version>
+      <version>0.6.0</version>
       <executions>
         <execution>
           <goals>
@@ -232,7 +233,7 @@ _Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has 
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-failsafe-plugin</artifactId>
-      <version>2.20</version>
+      <version>2.22.1</version>
       <configuration>
         <argLine>
           -agentpath:${project.build.directory}/${faketime.binary}
@@ -240,6 +241,7 @@ _Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has 
           -XX:DisableIntrinsic=_currentTimeMillis
           -XX:CompileCommand=quiet
           -XX:CompileCommand=exclude,java/lang/System.currentTimeMillis
+          -XX:CompileCommand=exclude,jdk/internal/misc/VM.getNanoTimeAdjustment
         </argLine>
       </configuration>
     </plugin>
@@ -247,7 +249,7 @@ _Note: before running tests from IntelliJ make sure `faketime-maven-plugin` has 
     <plugin>
       <groupId>io.github.faketime-java</groupId>
       <artifactId>faketime-maven-plugin</artifactId>
-      <version>0.1.0</version>
+      <version>0.6.0</version>
       <executions>
         <execution>
           <goals>
@@ -270,6 +272,7 @@ _Note: before running tests from Eclipse make sure `faketime-maven-plugin` has d
 -XX:DisableIntrinsic=_currentTimeMillis
 -XX:CompileCommand=quiet
 -XX:CompileCommand=exclude,java/lang/System.currentTimeMillis
+-XX:CompileCommand=exclude,jdk/internal/misc/VM.getNanoTimeAdjustment
 
 # if you're on macOS/Linux
 -agentpath:target/libfaketime
@@ -277,6 +280,7 @@ _Note: before running tests from Eclipse make sure `faketime-maven-plugin` has d
 -XX:DisableIntrinsic=_currentTimeMillis
 -XX:CompileCommand=quiet
 -XX:CompileCommand=exclude,java/lang/System.currentTimeMillis
+-XX:CompileCommand=exclude,jdk/internal/misc/VM.getNanoTimeAdjustment
 ```
 ## Gradle
 There are no instructions for Gradle yet, but if you'll figure this out, then don't be shy to make a pull request.
