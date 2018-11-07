@@ -32,6 +32,8 @@ jobs:
     services: []
     install: skip
     script: skip
+    os: linux
+    jdk: openjdk11
     deploy:
       provider: script
       script: release/deploy.sh
