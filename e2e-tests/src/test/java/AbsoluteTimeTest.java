@@ -229,12 +229,12 @@ public class AbsoluteTimeTest implements FakeTimeMixin {
 
   @Test
   public void offsetStoppedTimeBy_days() {
-    stopTimeAt(LocalDateTime.of(2000, 10, 9, 8, 7, 6, 5_000_000));
+    stopTimeAt(LocalDateTime.of(2000, 7, 6, 5, 4, 3, 2_000_000));
 
     offsetStoppedTimeByDays(1);
     offsetStoppedTimeByDays(30);
 
-    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 11, 8, 8, 7, 6, 5_000_000));
+    assertThat(LocalDateTime.now()).isEqualTo(LocalDateTime.of(2000, 8, 5, 5, 4, 3, 2_000_000));
   }
 
   @Test
