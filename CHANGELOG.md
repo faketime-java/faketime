@@ -1,3 +1,7 @@
+## [0.8.0] - 2018-11-09
+
+- Greatly simplified agent code thanks to [Michael Rasmussen](https://github.com/Maldivia).
+
 ## [0.7.0] - 2018-11-07
 
 - Support attaching same agent multiple times.

@@ -1,22 +1,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include "jvmti.h"
-#include "macros.c"
+
+typedef struct {
+  jmethodID method;
+  void *address;
+} method_entry;
+
+#define MAX_METHOD_ENTRIES 512
+static method_entry methodEntries[MAX_METHOD_ENTRIES];
+static int methodEntryIndex = 0;
 
 static jvmtiEnv *jvmti = NULL;
-static jobject (*realMethods[301])(JNIEnv *, jobject, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
-static jmethodID realMethodIds[301];
-static int realMethodIndex = 0;
 
-static int currentTimeMillisMethodIndex = -1;
-static jobject (*fakeCurrentTimeMillisReturningObject)(JNIEnv *, jobject);
-static jlong (*realCurrentTimeMillis)(JNIEnv *, jobject);
-
-static int getNanoTimeAdjustmentMethodIndex = -1;
-static jobject (*fakeGetNanoTimeAdjustmentReturningObject)(JNIEnv *, jobject, jlong);
-static jlong (*realGetNanoTimeAdjustment)(JNIEnv *, jobject, jlong);
-
-generateFakeMethods
+static jlong (*realCurrentTimeMillis)(JNIEnv *, jclass);
+static jlong (*realGetNanoTimeAdjustment)(JNIEnv *, jclass, jlong);
 
 jstring getSystemProperty(JNIEnv *jni_env, const char *name) {
   jclass systemClass = (*jni_env)->FindClass(jni_env, "java/lang/System");
@@ -26,100 +24,102 @@ jstring getSystemProperty(JNIEnv *jni_env, const char *name) {
                                             (*jni_env)->NewStringUTF(jni_env, name));
 }
 
-jstring getAbsoluteSystemProperty(JNIEnv *jni_env) {
-  return getSystemProperty(jni_env, "faketime.absolute.ms");
-}
+int getAbsoluteFromSystemProperty(JNIEnv *jni_env, jlong *result) {
+  jstring stringValue = getSystemProperty(jni_env, "faketime.absolute.ms");
 
-jstring getOffsetSystemProperty(JNIEnv *jni_env) {
-  return getSystemProperty(jni_env, "faketime.offset.ms");
-}
-
-jlong fakeCurrentTimeMillis(JNIEnv *jni_env, jobject object) {
-  jstring absoluteValueString = getAbsoluteSystemProperty(jni_env);
-
-  if (absoluteValueString != NULL) {
-    const char *absoluteValueStringChars = (*jni_env)->GetStringUTFChars(jni_env, absoluteValueString, NULL);
-    jlong time = strtoll(absoluteValueStringChars, NULL, 10);
-    (*jni_env)->ReleaseStringUTFChars(jni_env, absoluteValueString, absoluteValueStringChars);
-    return time;
+  if (stringValue != NULL) {
+    const char *stringChars = (*jni_env)->GetStringUTFChars(jni_env, stringValue, NULL);
+    jlong longValue = strtoll(stringChars, NULL, 10);
+    (*jni_env)->ReleaseStringUTFChars(jni_env, stringValue, stringChars);
+    *result = longValue;
+    return 1;
   }
 
-  jstring offsetValueString = getOffsetSystemProperty(jni_env);
-
-  if (offsetValueString != NULL) {
-    const char *offsetValueStringChars = (*jni_env)->GetStringUTFChars(jni_env, offsetValueString, NULL);
-    jlong time = realCurrentTimeMillis(jni_env, object) + strtoll(offsetValueStringChars, NULL, 10);
-    (*jni_env)->ReleaseStringUTFChars(jni_env, offsetValueString, offsetValueStringChars);
-    return time;
-  }
-
-  return realCurrentTimeMillis(jni_env, object);
+  return 0;
 }
 
-jlong fakeGetNanoTimeAdjustment(JNIEnv *jni_env, jobject object, jlong offsetInSeconds) {
-  jstring absoluteValueString = getAbsoluteSystemProperty(jni_env);
+int getOffsetFromSystemProperty(JNIEnv *jni_env, jlong *result) {
+  jstring stringValue = getSystemProperty(jni_env, "faketime.offset.ms");
 
-  if (absoluteValueString != NULL) {
-    const char *absoluteValueStringChars = (*jni_env)->GetStringUTFChars(jni_env, absoluteValueString, NULL);
-    jlong time = strtoll(absoluteValueStringChars, NULL, 10);
-    (*jni_env)->ReleaseStringUTFChars(jni_env, absoluteValueString, absoluteValueStringChars);
-    return (time - offsetInSeconds * 1000) * 1000000;
+  if (stringValue != NULL) {
+    const char *stringChars = (*jni_env)->GetStringUTFChars(jni_env, stringValue, NULL);
+    jlong longValue = strtoll(stringChars, NULL, 10);
+    (*jni_env)->ReleaseStringUTFChars(jni_env, stringValue, stringChars);
+    *result = longValue;
+    return 1;
   }
 
-  return realGetNanoTimeAdjustment(jni_env, object, offsetInSeconds);
+  return 0;
 }
 
-void JNICALL onNativeMethodBind(jvmtiEnv *jvmti_env, JNIEnv* jni_env, jthread thread, jmethodID method, void* address, void** new_address_ptr) {
-  if (realCurrentTimeMillis != NULL) {
+jlong fakeCurrentTimeMillis(JNIEnv *jni_env, jclass klass) {
+  jlong propertyValue;
+
+  if (getAbsoluteFromSystemProperty(jni_env, &propertyValue)) {
+    return propertyValue;
+  }
+  else if (getOffsetFromSystemProperty(jni_env, &propertyValue)) {
+    return realCurrentTimeMillis(jni_env, klass) + propertyValue;
+  }
+
+  return realCurrentTimeMillis(jni_env, klass);
+}
+
+jlong fakeGetNanoTimeAdjustment(JNIEnv *jni_env, jclass klass, jlong offsetInSeconds) {
+  jlong propertyValue;
+
+  if (getAbsoluteFromSystemProperty(jni_env, &propertyValue)) {
+    return (propertyValue - offsetInSeconds * 1000) * 1000000;
+  }
+
+  return realGetNanoTimeAdjustment(jni_env, klass, offsetInSeconds);
+}
+
+void JNICALL onNativeMethodBind(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread, jmethodID method, void *address, void **new_address_ptr) {
+  if (realCurrentTimeMillis == NULL && methodEntryIndex < MAX_METHOD_ENTRIES) {
+    methodEntries[methodEntryIndex++] = (method_entry) { .address = address, .method = method };
+  }
+}
+
+void *patchNative(JNIEnv *jni_env, char *className, char *methodName, char *methodSignature, void *nativeMethodPtr) {
+  jclass klass = (*jni_env)->FindClass(jni_env, className);
+
+  if ((*jni_env)->ExceptionCheck(jni_env)) {
+    // In case of NoClassDefFoundError (jdk/internal/misc/VM does't exist on Java < 9)
+    (*jni_env)->ExceptionClear(jni_env);
+    return NULL;
+  }
+
+  if (klass) {
+    jmethodID method = (*jni_env)->GetStaticMethodID(jni_env, klass, methodName, methodSignature);
+
+    if (method) {
+      int i = 0;
+
+      for (; i < methodEntryIndex; i++) {
+        if (methodEntries[i].method == method) {
+          JNINativeMethod native;
+          native.fnPtr = nativeMethodPtr;
+          native.name = methodName;
+          native.signature = methodSignature;
+          (*jni_env)->RegisterNatives(jni_env, klass, &native, 1);
+
+          return methodEntries[i].address;
+        }
+      }
+    }
+  }
+
+  return NULL;
+}
+
+void JNICALL onVmInit(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread) {
+  realCurrentTimeMillis = patchNative(jni_env, "java/lang/System", "currentTimeMillis", "()J", fakeCurrentTimeMillis);
+  realGetNanoTimeAdjustment = patchNative(jni_env, "jdk/internal/misc/VM", "getNanoTimeAdjustment", "(J)J", fakeGetNanoTimeAdjustment);
+
+  if (realCurrentTimeMillis == NULL) {
+    fprintf(stderr, "FakeTime agent failed to patch currentTimeMillis.\n");
     return;
-  }
-
-  char *methodName = NULL;
-
-  if ((*jvmti)->GetMethodName(jvmti, method, &methodName, NULL, NULL) == JVMTI_ERROR_NONE) {
-    // java 8
-    if (strcmp("currentTimeMillis", methodName) == 0) {
-      realCurrentTimeMillis = address;
-      *new_address_ptr = &fakeCurrentTimeMillis;
-    }
-  } else {
-    // java > 8
-    switch (realMethodIndex) {
-      generateFakeMethodCases
-      default:
-        break;
-    }
-
-    realMethodIds[realMethodIndex] = method;
-    realMethodIndex++;
-  }
-}
-
-void JNICALL onVmInit(jvmtiEnv *jvmti_env, JNIEnv* jni_env, jthread thread) {
-  if (realCurrentTimeMillis != NULL) {
-    return;
-  }
-
-  int i;
-
-  for (i = 0; i < realMethodIndex; i++) {
-    char *methodName = NULL;
-    jvmtiError err = (*jvmti)->GetMethodName(jvmti, realMethodIds[i], &methodName, NULL, NULL);
-
-    if (err != JVMTI_ERROR_NONE) {
-      fprintf(stderr, "FakeTime agent failed to get native method name");
-      return;
-    }
-
-    if (strcmp("currentTimeMillis", methodName) == 0) {
-      currentTimeMillisMethodIndex = i;
-      fakeCurrentTimeMillisReturningObject = (void *)fakeCurrentTimeMillis;
-      realCurrentTimeMillis = (void *)realMethods[i];
-    } else if (strcmp("getNanoTimeAdjustment", methodName) == 0) {
-      getNanoTimeAdjustmentMethodIndex = i;
-      fakeGetNanoTimeAdjustmentReturningObject = (void *)fakeGetNanoTimeAdjustment;
-      realGetNanoTimeAdjustment = (void *)realMethods[i];
-    }
   }
 }
 
@@ -129,7 +129,7 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) 
   }
 
   if ((*jvm)->GetEnv(jvm, (void **)&jvmti, JVMTI_VERSION_1_0) != JNI_OK || jvmti == NULL) {
-    fprintf(stderr, "FakeTime agent failed to get JVMTI");
+    fprintf(stderr, "FakeTime agent failed to get JVMTI.\n");
     return JNI_ERR;
   }
 
@@ -139,7 +139,7 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) 
   callbacks.VMInit = &onVmInit;
 
   if ((*jvmti)->SetEventCallbacks(jvmti, &callbacks, sizeof(callbacks)) != JVMTI_ERROR_NONE) {
-    fprintf(stderr, "FakeTime agent failed to set JVMTI callbacks");
+    fprintf(stderr, "FakeTime agent failed to set JVMTI callbacks.\n");
     return JNI_ERR;
   }
 
@@ -148,17 +148,17 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) 
   capabilities.can_generate_native_method_bind_events = 1;
 
   if ((*jvmti)->AddCapabilities(jvmti, &capabilities) != JVMTI_ERROR_NONE) {
-    fprintf(stderr, "FakeTime agent failed to get necessary JVMTI capabilities");
+    fprintf(stderr, "FakeTime agent failed to get necessary JVMTI capabilities.\n");
     return JNI_ERR;
   }
 
   if ((*jvmti)->SetEventNotificationMode(jvmti, JVMTI_ENABLE, JVMTI_EVENT_NATIVE_METHOD_BIND, NULL) != JVMTI_ERROR_NONE) {
-    fprintf(stderr, "FakeTime agent failed to set event notification");
+    fprintf(stderr, "FakeTime agent failed to set event notification.\n");
     return JNI_ERR;
   }
 
   if ((*jvmti)->SetEventNotificationMode(jvmti, JVMTI_ENABLE, JVMTI_EVENT_VM_INIT, NULL) != JVMTI_ERROR_NONE) {
-    fprintf(stderr, "FakeTime agent failed to set event notification");
+    fprintf(stderr, "FakeTime agent failed to set event notification.\n");
     return JNI_ERR;
   }
 
