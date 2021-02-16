@@ -71,6 +71,10 @@ jlong fakeGetNanoTimeAdjustment(JNIEnv *jni_env, jclass klass, jlong offsetInSec
   if (getAbsoluteFromSystemProperty(jni_env, &propertyValue)) {
     return (propertyValue - offsetInSeconds * 1000) * 1000000;
   }
+  
+  if (getOffsetFromSystemProperty(jni_env, &propertyValue)) {
+    return realGetNanoTimeAdjustment(jni_env, klass, offsetInSeconds) + (propertyValue * 1000 * 1000);
+  }
 
   return realGetNanoTimeAdjustment(jni_env, klass, offsetInSeconds);
 }
@@ -119,6 +123,11 @@ void JNICALL onVmInit(jvmtiEnv *jvmti_env, JNIEnv *jni_env, jthread thread) {
 
   if (realCurrentTimeMillis == NULL) {
     fprintf(stderr, "FakeTime agent failed to patch currentTimeMillis.\n");
+    return;
+  }
+  
+  if (realGetNanoTimeAdjustment == NULL) {
+    fprintf(stderr, "FakeTime agent failed to patch getNanoTimeAdjustment.\n");
     return;
   }
 }
