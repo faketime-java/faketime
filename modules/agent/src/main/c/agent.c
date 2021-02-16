@@ -71,9 +71,8 @@ jlong fakeGetNanoTimeAdjustment(JNIEnv *jni_env, jclass klass, jlong offsetInSec
   if (getAbsoluteFromSystemProperty(jni_env, &propertyValue)) {
     return (propertyValue - offsetInSeconds * 1000) * 1000000;
   }
-  
-  if (getOffsetFromSystemProperty(jni_env, &propertyValue)) {
-    return realGetNanoTimeAdjustment(jni_env, klass, offsetInSeconds) + (propertyValue * 1000 * 1000);
+  else if (getOffsetFromSystemProperty(jni_env, &propertyValue)) {
+    return realGetNanoTimeAdjustment(jni_env, klass, offsetInSeconds) + propertyValue * 1000000;
   }
 
   return realGetNanoTimeAdjustment(jni_env, klass, offsetInSeconds);
